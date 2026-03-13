@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>To-Do List</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+font-family:Segoe UI;
+background:linear-gradient(135deg,#5f2c82,#8e44ad);
+margin:0;
+padding:40px;
+color:white;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+.card{
+background:white;
+color:black;
+border-radius:12px;
+padding:25px;
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+h2{
+margin-top:0;
+}
+
+form{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+}
+
+input,select{
+padding:8px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+button{
+background:#7d3cff;
+border:none;
+color:white;
+padding:8px 15px;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#692ed6;
+}
+
+.erro{
+background:#ffdddd;
+color:#a30000;
+padding:10px;
+border-radius:6px;
+margin-bottom:15px;
+}
+
+.table-container{
+max-height:300px;
+overflow-y:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#7d3cff;
+color:white;
+padding:10px;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+.done{
+opacity:0.4;
+}
+
+.icon{
+margin:0 5px;
+text-decoration:none;
+}
+
+.icon:hover{
+opacity:0.6;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h2><i class="fa-solid fa-list-check"></i> Minhas Tarefas</h2>
+
+{% if erro %}
+<div class="erro">{{erro}}</div>
+{% endif %}
+
+<form method="POST">
+
+{% csrf_token %}
+
+<input name="nome" placeholder="Nome da tarefa">
+
+<input type="date" name="data">
+
+<select name="tipo">
+<option value="">Tipo</option>
+<option value="estudo">Estudo</option>
+<option value="trabalho">Trabalho</option>
+<option value="pessoal">Pessoal</option>
+</select>
+
+<button type="submit">
+<i class="fa-solid fa-plus"></i>
+</button>
+
+</form>
+
+<div class="table-container">
+
+<table>
+
+<tr>
+<th>Tarefa</th>
+<th>Tipo</th>
+<th>Data</th>
+<th>Ações</th>
+</tr>
+
+{% for task in afazer %}
+
+<tr>
+
+<td>{{task.nome}}</td>
+<td>{{task.tipo}}</td>
+<td>{{task.data_conclusao}}</td>
+
+<td>
+
+<a class="icon" href="/concluir/{{task.id}}">
+<i class="fa-solid fa-check"></i>
+</a>
+
+<a class="icon" href="/editar/{{task.id}}">
+<i class="fa-solid fa-pen"></i>
+</a>
+
+<a class="icon" href="/deletar/{{task.id}}">
+<i class="fa-solid fa-trash"></i>
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+{% for task in feitas %}
+
+<tr class="done">
+
+<td>{{task.nome}}</td>
+<td>{{task.tipo}}</td>
+<td>{{task.data_conclusao}}</td>
+
+<td>
+
+<i class="fa-solid fa-check"></i>
+
+<a class="icon" href="/deletar/{{task.id}}">
+<i class="fa-solid fa-trash"></i>
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
